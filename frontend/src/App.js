@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
@@ -53,9 +53,11 @@ const ContentWrapper = styled.div`
   min-height: 100vh;
 `;
 
-function App() {
+// Main App Router Component
+function AppRouter() {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Check for existing user in sessionStorage first
@@ -83,12 +85,16 @@ function App() {
     toast.success(`Welcome ${userData.name}! 🎉`, {
       icon: userData.role === 'teacher' ? '👨‍🏫' : '👨‍🎓',
     });
+    
+    // Navigate to appropriate dashboard
+    navigate(userData.role === 'teacher' ? '/teacher' : '/student');
   };
 
   const handleUserLogout = () => {
     setUser(null);
     sessionStorage.removeItem('pollUser');
     toast.success('Logged out successfully! 👋');
+    navigate('/');
   };
 
   if (isLoading) {
@@ -98,57 +104,64 @@ function App() {
   return (
     <UserProvider value={{ user, setUser: handleUserLogin, logout: handleUserLogout }}>
       <SocketProvider>
-        <Router>
-          <AppContainer
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <BackgroundDecoration />
-            <ContentWrapper>
-              <AnimatePresence mode="wait">
-                <Routes>
-                  <Route
-                    path="/"
-                    element={
-                      user ? (
-                        <Navigate
-                          to={user.role === 'teacher' ? '/teacher' : '/student'}
-                          replace
-                        />
-                      ) : (
-                        <LandingPage onUserLogin={handleUserLogin} />
-                      )
-                    }
-                  />
-                  <Route
-                    path="/teacher"
-                    element={
-                      user && user.role === 'teacher' ? (
-                        <TeacherDashboard />
-                      ) : (
-                        <Navigate to="/" replace />
-                      )
-                    }
-                  />
-                  <Route
-                    path="/student"
-                    element={
-                      user && user.role === 'student' ? (
-                        <StudentDashboard />
-                      ) : (
-                        <Navigate to="/" replace />
-                      )
-                    }
-                  />
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-              </AnimatePresence>
-            </ContentWrapper>
-          </AppContainer>
-        </Router>
+        <AppContainer
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <BackgroundDecoration />
+          <ContentWrapper>
+            <AnimatePresence mode="wait">
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    user ? (
+                      <Navigate
+                        to={user.role === 'teacher' ? '/teacher' : '/student'}
+                        replace
+                      />
+                    ) : (
+                      <LandingPage onUserLogin={handleUserLogin} />
+                    )
+                  }
+                />
+                <Route
+                  path="/teacher"
+                  element={
+                    user && user.role === 'teacher' ? (
+                      <TeacherDashboard />
+                    ) : (
+                      <Navigate to="/" replace />
+                    )
+                  }
+                />
+                <Route
+                  path="/student"
+                  element={
+                    user && user.role === 'student' ? (
+                      <StudentDashboard />
+                    ) : (
+                      <Navigate to="/" replace />
+                    )
+                  }
+                />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </AnimatePresence>
+          </ContentWrapper>
+        </AppContainer>
       </SocketProvider>
     </UserProvider>
+  );
+}
+
+// Root App Component
+function App() {
+  return (
+    <Router>
+      <AppRouter />
+    </Router>
   );
 }
 

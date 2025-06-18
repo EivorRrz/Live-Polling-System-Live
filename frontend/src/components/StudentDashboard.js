@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useSocket } from '../context/SocketContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell, Tooltip } from 'recharts';
+import { useUser } from '../context/UserContext';
 
 const DashboardContainer = styled.div`
   min-height: 100vh;
@@ -92,6 +93,7 @@ const StudentDashboard = () => {
         kickMessage 
     } = useSocket();
 
+    const { logout } = useUser();
     const [messageInput, setMessageInput] = useState('');
     const [answeredPolls, setAnsweredPolls] = useState(new Set());
     const [submissionStatus, setSubmissionStatus] = useState({});
@@ -166,10 +168,9 @@ const StudentDashboard = () => {
         return `${totalMinutes}:${seconds.toString().padStart(2, '0')}`;
     };
 
-    const logout = () => {
-        sessionStorage.removeItem('pollUser');
+    const handleLogout = () => {
         if (socket) socket.disconnect();
-        window.location.reload();
+        logout();
     };
 
     return (
@@ -204,7 +205,7 @@ const StudentDashboard = () => {
                             </p>
                         </div>
                         <button
-                            onClick={logout}
+                            onClick={handleLogout}
                             style={{
                                 background: 'linear-gradient(135deg, #ef4444, #dc2626)',
                                 color: 'white',
