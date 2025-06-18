@@ -27,6 +27,8 @@ app.use(cors({
         "http://localhost:3000", 
         "https://frontend-2zru.onrender.com", 
         "https://darling-taffy-a224d1.netlify.app",
+        "https://live-polling-system-live-task.netlify.app",
+        "https://live-polling-system-task-1.netlify.app",
         "https://*.netlify.app", 
         "https://*.vercel.app"
     ],
