@@ -23,7 +23,13 @@ connectDB()
 //inits!
 const app = express();
 app.use(cors({
-    origin: ["http://localhost:3000", "https://frontend-2zru.onrender.com"],
+    origin: [
+        "http://localhost:3000", 
+        "https://frontend-2zru.onrender.com", 
+        "https://darling-taffy-a224d1.netlify.app",
+        "https://*.netlify.app", 
+        "https://*.vercel.app"
+    ],
     credentials: true
 }));
 app.use(express.json());

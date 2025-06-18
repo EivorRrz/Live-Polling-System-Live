@@ -6,7 +6,13 @@ import * as chatController from "../controller/chatController.js";
 export default function setupSocket(server) {
     const io = new Server(server, {
         cors: {
-            origin: ["http://localhost:3000", "https://frontend-2zru.onrender.com"],
+            origin: [
+                "http://localhost:3000", 
+                "https://frontend-2zru.onrender.com", 
+                "https://darling-taffy-a224d1.netlify.app",
+                "https://*.netlify.app", 
+                "https://*.vercel.app"
+            ],
             methods: ["GET", "POST"]
         }
     });

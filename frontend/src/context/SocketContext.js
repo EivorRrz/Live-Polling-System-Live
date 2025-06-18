@@ -27,7 +27,7 @@ export const SocketProvider = ({ children }) => {
     const [kickMessage, setKickMessage] = useState('');
 
     useEffect(() => {
-        const newSocket = io('http://localhost:5000', {
+        const newSocket = io('https://live-polling-system-live.onrender.com', {
             reconnection: true,
             reconnectionDelay: 1000,
             reconnectionAttempts: 5,
