@@ -1,0 +1,12 @@
+{
+  "name": "interview-io-task",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "start": "cd Server && npm start",
+    "dev": "concurrently \"cd Server && npm start\" \"cd frontend && npm start\""
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+} 
